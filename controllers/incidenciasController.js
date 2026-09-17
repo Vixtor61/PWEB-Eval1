@@ -1,6 +1,6 @@
 const incidencias = require('../data/incidencias');
 const helper = require('../utils/helpers');
-
+//TODO modificar creacion de ID luego
 const registrarIncidencia = (req, res) => {
     try {
        
@@ -11,12 +11,12 @@ const registrarIncidencia = (req, res) => {
         const {  empleado, area,descripcion, prioridad } = req.body;
         const nuevaIncidencia = { empleado, area, descripcion, prioridad };
 
-        validacion = helper.ValidarNuevaIncidencia(nuevaIncidencia);
+        const validacion = helper.ValidarNuevaIncidencia(nuevaIncidencia);
         if (!validacion.valido) {
             return res.status(400).json({ error: validacion.mensaje });
         }
         //Asignar ID y guardar la incidencia
-        id = incidencias.length + 1;
+        let id = incidencias.length + 1;
         nuevaIncidencia.id = id;
         incidencias.push(nuevaIncidencia);
         res.status(201).json({ message: 'Incidencia registrada correctamente' });
@@ -45,12 +45,13 @@ const listarIncidencias = (req, res) => {
 }
 
 const busquedaIncidenciaID = (req, res) => {
-    id = req.params.id
-    validacion = helper.ValidarIDBusqueda(id);
-    if (!validacion.valido) {
-        return res.status(400).json({ error: validacion.mensaje });
+    let id = req.params.id
+    const validacionID = helper.ValidarIDBusqueda(id);
+    if (!validacionID.valido) {
+        return res.status(400).json({ error: validacionID.mensaje });
     }
-    incidencia = incidencias.find(incidencia => incidencia.id === parseInt(id));
+    id = Number(id);
+    let incidencia = incidencias.find(incidencia => incidencia.id === id);
     if (!incidencia) {
         return res.status(404).json({ error: 'Incidencia no encontrada' });
     }
@@ -60,22 +61,22 @@ const busquedaIncidenciaID = (req, res) => {
 const cambiarEstadoIncidencia = (req, res) => {
     try{
         //Validar ID y estado  
-        id = req.params.id
+        let id = req.params.id
         if ( req.body === undefined) {
                 return res.status(400).json({ error: 'peticion inválida' });
             }
-
-        validacion = helper.ValidarIDBusqueda(id);
-        if (!validacion.valido) {
-            return res.status(400).json({ error: validacion.mensaje });
+        const validacionBusqueda = helper.ValidarIDBusqueda(id);
+        if (!validacionBusqueda.valido) {
+            return res.status(400).json({ error: validacionBusqueda.mensaje });
         }
-        incidencia = incidencias.find(incidencia => incidencia.id === parseInt(id));
+        id = Number(id);
+        let incidencia = incidencias.find(incidencia => incidencia.id === id);
         
         if (!incidencia) {
             return res.status(404).json({ error: 'Incidencia no encontrada' });
         }
-        estado = req.body.estado
-        validacion = helper.ValidarEstado(estado);
+        let estado = req.body.estado
+        const validacion = helper.ValidarEstado(estado);
 
         if (!validacion.valido) {
             return res.status(400).json({ error: validacion.mensaje });
@@ -94,33 +95,25 @@ const cambiarEstadoIncidencia = (req, res) => {
 const eliminarIncidencia = (req, res) => {
     try{
         //Validar ID y estado  
-        id = req.params.id
-        if ( req.body === undefined) {
-                return res.status(400).json({ error: 'peticion inválida' });
-            }
+        let id = req.params.id
 
-        validacion = helper.ValidarIDBusqueda(id);
-        if (!validacion.valido) {
-            return res.status(400).json({ error: validacion.mensaje });
+        const validacionID = helper.ValidarIDBusqueda(id);
+        if (!validacionID.valido) {
+            return res.status(400).json({ error: validacionID.mensaje });
         }
-        incidencia = incidencias.find(incidencia => incidencia.id === parseInt(id));
-        
-        if (!incidencia) {
+        id = Number(id);
+ 
+        let findIndex = incidencias.findIndex(incidencia => incidencia.id === id);
+        if (findIndex === -1) {
             return res.status(404).json({ error: 'Incidencia no encontrada' });
         }
-        estado = req.body.estado
-        validacion = helper.ValidarEstado(estado);
-
-        if (!validacion.valido) {
-            return res.status(400).json({ error: validacion.mensaje });
-        }
-
-        incidencia.estado = estado;
-
         
-        res.status(200).json(incidencia);
+        incidencias.splice(findIndex, 1);
+        
+        res.status(200).json({ message: 'Incidencia eliminada correctamente' });
     }
     catch (error) {
+        console.error('Error al eliminar la incidencia:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
