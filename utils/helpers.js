@@ -17,6 +17,10 @@ const ValidarNuevaIncidencia = (incidencia) => {
     if ( !cadenaValida(empleado) || !cadenaValida(area) || !cadenaValida(descripcion) || !cadenaValida(prioridad)) {
         return resultado = {valido: false, mensaje: 'Los campos deben ser cadenas no vacías'};
     }
+   
+    if(prioridad === prioridad.toLowerCase()){
+        return resultado = {valido: false, mensaje: 'Prioridad inválida. Debe empezar con mayúscula. ejemplo: \'Alta\', \'Media\' o \'Baja\''};
+    }
     console.log('probar prioridad');
     switch (prioridad) {
         case 'Alta':
@@ -55,10 +59,13 @@ const ValidarEstado = (estado) => {
     let resultado = {valido: false, mensaje: ''};
     
     if ( !estado || !cadenaValida(estado)) {
-        
-        
+            
         return resultado = {valido: false, mensaje: 'El campo de estado debe ser una cadena no vacía'};
         
+    }
+
+    if(estado === estado.toLowerCase()){
+        return resultado = {valido: false, mensaje: 'Estado inválido. Debe empezar con mayúscula. ejemplo: \'Pendiente\', \'En Progreso\', \'Resuelta\' o \'Cancelada\''};
     }
     
     switch (estado) {
@@ -91,9 +98,8 @@ const obtenerClasficiacion = (prioridad) => {
 }
 
 const getID = () => {
-    id = id + 1;
-    console.log('Generando nuevo ID:', id);
-    return id;
+   
+    return ++id;
 
 }
 

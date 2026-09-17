@@ -7,17 +7,18 @@ const registrarIncidencia = (req, res) => {
         if ( req.body === undefined) {
             return res.status(400).json({ error: 'peticion inválida' });
         }
-
-        const {  empleado, area,descripcion, prioridad } = req.body;
-        const nuevaIncidencia = { empleado, area, descripcion, prioridad };
+        let id = helper.getID();
+       
+        const { empleado, area,descripcion, prioridad } = req.body;
+        const nuevaIncidencia = { id , empleado, area, descripcion, prioridad };
 
         const validacion = helper.ValidarNuevaIncidencia(nuevaIncidencia);
         if (!validacion.valido) {
             return res.status(400).json({ error: validacion.mensaje });
         }
         //Asignar ID y guardar la incidencia
-        let id = helper.getID();
-        nuevaIncidencia.id = id;
+ 
+        nuevaIncidencia.estado = 'Pendiente'; // Estado inicial
         //Limpiar campos de errores communes
         nuevaIncidencia.empleado = empleado.trim();
         nuevaIncidencia.area = area.trim();
