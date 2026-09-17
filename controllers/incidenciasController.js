@@ -1,5 +1,5 @@
 const incidencias = require('../data/incidencias');
-const { ValidarNuevaIncidencia, validarIDBusqueda } = require('../utils/helpers');
+const { ValidarNuevaIncidencia, ValidarIDBusqueda } = require('../utils/helpers');
 
 const registrarIncidencia = (req, res) => {
     try {
@@ -46,7 +46,7 @@ const listarIncidencias = (req, res) => {
 
 const busquedaIncidenciaID = (req, res) => {
     id = req.params.id
-    validacion = validarIDBusqueda(id);
+    validacion = ValidarIDBusqueda(id);
     if (!validacion.valido) {
         return res.status(400).json({ error: validacion.mensaje });
     }
