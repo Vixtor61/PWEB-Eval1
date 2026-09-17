@@ -91,4 +91,38 @@ const cambiarEstadoIncidencia = (req, res) => {
     }
 }
 
-module.exports = {registrarIncidencia, listarIncidencias, busquedaIncidenciaID, cambiarEstadoIncidencia};
+const eliminarIncidencia = (req, res) => {
+    try{
+        //Validar ID y estado  
+        id = req.params.id
+        if ( req.body === undefined) {
+                return res.status(400).json({ error: 'peticion inválida' });
+            }
+
+        validacion = helper.ValidarIDBusqueda(id);
+        if (!validacion.valido) {
+            return res.status(400).json({ error: validacion.mensaje });
+        }
+        incidencia = incidencias.find(incidencia => incidencia.id === parseInt(id));
+        
+        if (!incidencia) {
+            return res.status(404).json({ error: 'Incidencia no encontrada' });
+        }
+        estado = req.body.estado
+        validacion = helper.ValidarEstado(estado);
+
+        if (!validacion.valido) {
+            return res.status(400).json({ error: validacion.mensaje });
+        }
+
+        incidencia.estado = estado;
+
+        
+        res.status(200).json(incidencia);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
+
+module.exports = {registrarIncidencia, listarIncidencias, busquedaIncidenciaID, cambiarEstadoIncidencia, eliminarIncidencia};

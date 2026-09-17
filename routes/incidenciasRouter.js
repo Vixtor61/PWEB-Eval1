@@ -5,10 +5,10 @@ const {
     registrarIncidencia,listarIncidencias,busquedaIncidenciaID,cambiarEstadoIncidencia,eliminarIncidencia
 } = require('../controllers/incidenciasController');
 
-router.post('/registrar', registrarIncidencia)
-router.get('/listar', listarIncidencias)
-router.get('/buscar/:id', busquedaIncidenciaID)
+router.post('/', registrarIncidencia)
+router.get('/', listarIncidencias)
+router.get('/:id', busquedaIncidenciaID)
 router.put('/:id/estado', cambiarEstadoIncidencia)
-//router.delete('/eliminar/:id', eliminarIncidencia)
+router.delete('/:id', eliminarIncidencia)
 
 module.exports = router;
