@@ -1,5 +1,5 @@
 const express = require('express')
-const incidenciasRoutes = require('./routes/incidencias')
+const incidenciasRoutes = require('./routes/incidenciasRouter')
 
 const app = express()
 const port = 3000
