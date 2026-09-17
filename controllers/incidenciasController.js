@@ -1,5 +1,5 @@
 const incidencias = require('../data/incidencias');
-const { ValidarNuevaIncidencia, ValidarIDBusqueda } = require('../utils/helpers');
+const helper = require('../utils/helpers');
 
 const registrarIncidencia = (req, res) => {
     try {
@@ -11,7 +11,7 @@ const registrarIncidencia = (req, res) => {
         const {  empleado, area,descripcion, prioridad } = req.body;
         const nuevaIncidencia = { empleado, area, descripcion, prioridad };
 
-        validacion = ValidarNuevaIncidencia(nuevaIncidencia);
+        validacion = helper.ValidarNuevaIncidencia(nuevaIncidencia);
         if (!validacion.valido) {
             return res.status(400).json({ error: validacion.mensaje });
         }
@@ -46,7 +46,7 @@ const listarIncidencias = (req, res) => {
 
 const busquedaIncidenciaID = (req, res) => {
     id = req.params.id
-    validacion = ValidarIDBusqueda(id);
+    validacion = helper.ValidarIDBusqueda(id);
     if (!validacion.valido) {
         return res.status(400).json({ error: validacion.mensaje });
     }
@@ -56,4 +56,39 @@ const busquedaIncidenciaID = (req, res) => {
     }
     res.status(200).json(incidencia);
 }
-module.exports = {registrarIncidencia, listarIncidencias, busquedaIncidenciaID};
+
+const cambiarEstadoIncidencia = (req, res) => {
+    try{
+        //Validar ID y estado  
+        id = req.params.id
+        if ( req.body === undefined) {
+                return res.status(400).json({ error: 'peticion inválida' });
+            }
+
+        validacion = helper.ValidarIDBusqueda(id);
+        if (!validacion.valido) {
+            return res.status(400).json({ error: validacion.mensaje });
+        }
+        incidencia = incidencias.find(incidencia => incidencia.id === parseInt(id));
+        
+        if (!incidencia) {
+            return res.status(404).json({ error: 'Incidencia no encontrada' });
+        }
+        estado = req.body.estado
+        validacion = helper.ValidarEstado(estado);
+
+        if (!validacion.valido) {
+            return res.status(400).json({ error: validacion.mensaje });
+        }
+
+        incidencia.estado = estado;
+
+        
+        res.status(200).json(incidencia);
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
+
+module.exports = {registrarIncidencia, listarIncidencias, busquedaIncidenciaID, cambiarEstadoIncidencia};

@@ -49,4 +49,33 @@ const cadenaValida = (cadena) => {
     return false;
 }
 
-module.exports = { ValidarNuevaIncidencia , ValidarIDBusqueda};
+const ValidarEstado = (estado) => {
+    
+    let resultado = {valido: false, mensaje: ''};
+    
+    if ( !estado || !cadenaValida(estado)) {
+        
+        
+        return resultado = {valido: false, mensaje: 'El campo de estado debe ser una cadena no vacía'};
+        
+    }
+    
+    console.log('vliadr Estado');
+    switch (estado) {
+        case 'Pendiente':
+        case 'En Progreso':
+        case 'Resuelta':
+        case 'Cancelada':
+            break;
+        default:
+            return resultado = {valido: false, mensaje: 'Estado inválido. Debe ser \'Pendiente\', \'En Progreso\', \'Resuelta\' o \'Cancelada\''};
+    }
+    console.log('estado valido');
+    return resultado = {valido: true, mensaje: 'Estado valido'};
+    
+}
+
+
+
+
+module.exports = { ValidarNuevaIncidencia , ValidarIDBusqueda, ValidarEstado};

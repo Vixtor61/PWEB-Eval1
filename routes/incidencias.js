@@ -8,7 +8,7 @@ const {
 router.post('/registrar', registrarIncidencia)
 router.get('/listar', listarIncidencias)
 router.get('/buscar/:id', busquedaIncidenciaID)
-//router.put('/cambiarEstado/:id', cambiarEstadoIncidencia)
+router.put('/:id/estado', cambiarEstadoIncidencia)
 //router.delete('/eliminar/:id', eliminarIncidencia)
 
 module.exports = router;
