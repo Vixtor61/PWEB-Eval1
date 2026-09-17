@@ -1,5 +1,5 @@
 const incidencias = require('../data/incidencias');
-const { ValidarNuevaIncidencia } = require('../utils/helpers');
+const { ValidarNuevaIncidencia, validarIDBusqueda } = require('../utils/helpers');
 
 const registrarIncidencia = (req, res) => {
     try {
@@ -46,6 +46,14 @@ const listarIncidencias = (req, res) => {
 
 const busquedaIncidenciaID = (req, res) => {
     id = req.params.id
-
+    validacion = validarIDBusqueda(id);
+    if (!validacion.valido) {
+        return res.status(400).json({ error: validacion.mensaje });
+    }
+    incidencia = incidencias.find(incidencia => incidencia.id === parseInt(id));
+    if (!incidencia) {
+        return res.status(404).json({ error: 'Incidencia no encontrada' });
+    }
+    res.status(200).json(incidencia);
 }
-module.exports = {registrarIncidencia, listarIncidencias};
+module.exports = {registrarIncidencia, listarIncidencias, busquedaIncidenciaID};

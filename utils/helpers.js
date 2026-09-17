@@ -30,6 +30,15 @@ const ValidarNuevaIncidencia = (incidencia) => {
     
 }
 
+const ValidarIDBusqueda = (id) => {
+    let resultado = {valido: false, mensaje: ''};
+    if (id === undefined || isNaN(id) || Number.isInteger(id) === false || id <= 0) {
+        return resultado = {valido: false, mensaje: 'ID inválido'};
+    }
+    return resultado = {valido: true, mensaje: 'ID válido'};
+    
+}
+
 const cadenaValida = (cadena) => {
     if (typeof cadena === 'string' && cadena.trim().length > 0) {
         return true;
@@ -37,4 +46,4 @@ const cadenaValida = (cadena) => {
     return false;
 }
 
-module.exports = { ValidarNuevaIncidencia };
+module.exports = { ValidarNuevaIncidencia , validarIDBusqueda};
