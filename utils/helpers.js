@@ -46,4 +46,4 @@ const cadenaValida = (cadena) => {
     return false;
 }
 
-module.exports = { ValidarNuevaIncidencia , validarIDBusqueda};
+module.exports = { ValidarNuevaIncidencia , ValidarIDBusqueda};
