@@ -118,4 +118,24 @@ const eliminarIncidencia = (req, res) => {
     }
 }
 
-module.exports = {registrarIncidencia, listarIncidencias, busquedaIncidenciaID, cambiarEstadoIncidencia, eliminarIncidencia};
+
+const estadisticasIncidencias = (req, res) => {
+    try {
+        res.status(200).json({
+            "totalIncidencias": incidencias.length,
+            "pendientes": incidencias.filter(incidencia => incidencia.estado === 'Pendiente').length,
+            "enProceso": incidencias.filter(incidencia => incidencia.estado === 'En Progreso').length,
+            "resueltas": incidencias.filter(incidencia => incidencia.estado === 'Resuelta').length,
+            "canceladas": incidencias.filter(incidencia => incidencia.estado === 'Cancelada').length
+        });
+      
+    }
+
+    catch (error) {
+        
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    
+}
+
+module.exports = {registrarIncidencia, listarIncidencias, busquedaIncidenciaID, cambiarEstadoIncidencia, eliminarIncidencia,estadisticasIncidencias};
