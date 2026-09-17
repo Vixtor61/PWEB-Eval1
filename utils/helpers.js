@@ -1,4 +1,5 @@
 const incidencias = require('../data/incidencias');
+let id = 0
 
 
 
@@ -60,7 +61,6 @@ const ValidarEstado = (estado) => {
         
     }
     
-    console.log('vliadr Estado');
     switch (estado) {
         case 'Pendiente':
         case 'En Progreso':
@@ -75,7 +75,30 @@ const ValidarEstado = (estado) => {
     
 }
 
+const obtenerClasficiacion = (prioridad) => {
+     
+    switch (prioridad) {
+        case 'Alta':
+            return 'Critica';
+        case 'Media':
+            return 'Importante';
+        case 'Baja':
+            return 'Normal';
+        default:
+            return "";
+    }
+
+}
+
+const getID = () => {
+    id = id + 1;
+    console.log('Generando nuevo ID:', id);
+    return id;
+
+}
 
 
 
-module.exports = { ValidarNuevaIncidencia , ValidarIDBusqueda, ValidarEstado};
+
+
+module.exports = { getID,ValidarNuevaIncidencia , ValidarIDBusqueda, ValidarEstado, obtenerClasficiacion};

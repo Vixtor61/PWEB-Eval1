@@ -1,6 +1,6 @@
 const incidencias = require('../data/incidencias');
 const helper = require('../utils/helpers');
-//TODO modificar creacion de ID luego
+
 const registrarIncidencia = (req, res) => {
     try {
        
@@ -16,7 +16,7 @@ const registrarIncidencia = (req, res) => {
             return res.status(400).json({ error: validacion.mensaje });
         }
         //Asignar ID y guardar la incidencia
-        let id = incidencias.length + 1;
+        let id = helper.getID();
         nuevaIncidencia.id = id;
         incidencias.push(nuevaIncidencia);
         res.status(201).json({ message: 'Incidencia registrada correctamente' });
@@ -92,6 +92,36 @@ const cambiarEstadoIncidencia = (req, res) => {
     }
 }
 
+const obtenerClasificacion = (req, res) => {
+    try{
+        //Validar ID y estado  
+        let id = req.params.id
+        const validacionID = helper.ValidarIDBusqueda(id);
+        if (!validacionID.valido) {
+            return res.status(400).json({ error: validacionID.mensaje });
+        }
+        id = Number(id);
+        let incidencia = incidencias.find(incidencia => incidencia.id === id);
+        
+        if (!incidencia) {
+            return res.status(404).json({ error: 'Incidencia no encontrada' });
+        }
+        
+     
+        return res.status(200).json({
+          "id": incidencia.id,
+          "clasificacion": helper.obtenerClasficiacion(incidencia.prioridad)
+        })
+   
+
+        
+    }
+    catch (error) {
+        console.error('Error al obtener la clasificación de la incidencia:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
+
 const eliminarIncidencia = (req, res) => {
     try{
         //Validar ID y estado  
@@ -138,4 +168,4 @@ const estadisticasIncidencias = (req, res) => {
     
 }
 
-module.exports = {registrarIncidencia, listarIncidencias, busquedaIncidenciaID, cambiarEstadoIncidencia, eliminarIncidencia,estadisticasIncidencias};
+module.exports = {registrarIncidencia, listarIncidencias, busquedaIncidenciaID, cambiarEstadoIncidencia, eliminarIncidencia,estadisticasIncidencias, obtenerClasificacion};
