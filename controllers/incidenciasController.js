@@ -18,6 +18,9 @@ const registrarIncidencia = (req, res) => {
         //Asignar ID y guardar la incidencia
         let id = helper.getID();
         nuevaIncidencia.id = id;
+        //Limpiar campos de errores communes
+        nuevaIncidencia.empleado = empleado.trim();
+        nuevaIncidencia.area = area.trim();
         incidencias.push(nuevaIncidencia);
         res.status(201).json({ message: 'Incidencia registrada correctamente' });
         }
