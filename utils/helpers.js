@@ -31,8 +31,11 @@ const ValidarNuevaIncidencia = (incidencia) => {
 }
 
 const ValidarIDBusqueda = (id) => {
+    console.log('Validando ID de búsqueda:', id);
+    id = Number(id);
+    console.log('ID convertido a número:', id);
     let resultado = {valido: false, mensaje: ''};
-    if (id === undefined || isNaN(id) || Number.isInteger(id) === false || id <= 0) {
+    if (id === undefined || isNaN(id)  || id <= 0) {
         return resultado = {valido: false, mensaje: 'ID inválido'};
     }
     return resultado = {valido: true, mensaje: 'ID válido'};
