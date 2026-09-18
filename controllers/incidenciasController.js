@@ -1,6 +1,6 @@
 const incidencias = require('../data/incidencias');
 const helper = require('../utils/helpers');
-
+//test
 const registrarIncidencia = (req, res) => {
     try {
        
